@@ -42,7 +42,7 @@ export function EmailSignInForm({ className }: EmailSignInFormProps) {
 
     const supabase = createClient();
 
-    const { error } = isSignUp
+    const { data, error } = isSignUp
       ? await supabase.auth.signUp({ email, password })
       : await supabase.auth.signInWithPassword({ email, password });
 
@@ -52,16 +52,23 @@ export function EmailSignInForm({ className }: EmailSignInFormProps) {
       return;
     }
 
+    // When email confirmation is disabled, signUp returns a session and we can enter immediately.
+    if (data.session) {
+      toast.success(isSignUp ? "Account created." : "Signed in successfully.");
+      router.push("/documents");
+      router.refresh();
+      return;
+    }
+
     if (isSignUp) {
-      toast.success("Account created. You can sign in now.");
+      toast.success("Account created. Check your email to confirm, then sign in.");
       setIsSignUp(false);
       setLoading(false);
       return;
     }
 
-    toast.success("Signed in successfully.");
-    router.push("/documents");
-    router.refresh();
+    toast.error("Unable to sign in. Please try again.");
+    setLoading(false);
   }
 
   return (
@@ -130,7 +137,7 @@ export function EmailSignInForm({ className }: EmailSignInFormProps) {
       <GlassCardFooter className="flex flex-col gap-3 border-t-0 bg-transparent px-8 pb-8 pt-4">
         <button
           type="button"
-          className="text-[0.875rem] font-medium tracking-[-0.01em] text-cyan-300/90 transition-colors hover:text-cyan-200"
+          className="cursor-pointer text-[0.875rem] font-medium tracking-[-0.01em] text-cyan-300/90 transition-colors hover:text-cyan-200"
           onClick={() => setIsSignUp((current) => !current)}
         >
           {isSignUp

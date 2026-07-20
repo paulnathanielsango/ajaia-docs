@@ -34,7 +34,7 @@ export function DocumentPresenceRail({
             <button
               type="button"
               className={cn(
-                "flex size-10 items-center justify-center overflow-hidden rounded-full border-2 shadow-lg shadow-black/30 ring-1 ring-white/10 outline-none transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-cyan-400/60",
+                "flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 shadow-lg shadow-black/30 ring-1 ring-white/10 outline-none transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-cyan-400/60",
                 !user.avatarUrl && "text-white",
               )}
               style={{
